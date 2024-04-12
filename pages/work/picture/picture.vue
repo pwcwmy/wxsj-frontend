@@ -68,6 +68,7 @@
 			},
 			commitImages(){
 				uploadAllImages(this.imgaes)
+				this.images=[]
 			}
 		}
 	};
