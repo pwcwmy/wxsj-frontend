@@ -38,7 +38,7 @@
 				icon3Path: require('@/static/images/fish.png'),
 				icon4Path: require('@/static/images/hippo.png'),
 				// 上传的图片信息暂存
-				imgaes: [],
+				images: [],
 				counterOfImages: 0
 			};
 		},
@@ -49,7 +49,7 @@
 					sourceType: ['camera'], // 可以指定来源是相册还是相机，默认二者都有
 					success: (res) => {
 						// tempFilePath可以作为img标签的src属性显示图片
-						this.imgaes.push(res.tempFilePaths)
+						this.images.push(res.tempFilePaths)
 						this.counterOfImages += res.tempFilePaths.length
 					}
 				});
@@ -60,14 +60,14 @@
 					sourceType: ['album'], // 可以指定来源是相册还是相机，默认二者都有
 					success: (res) => {
 						// tempFilePath可以作为img标签的src属性显示图片
-						this.imgaes.push(res.tempFilePaths)
+						this.images.push(res.tempFilePaths)
 						this.counterOfImages += res.tempFilePaths.length
-						console.log(this.imgaes, this.counterOfImages)
+						console.log(this.images, this.counterOfImages)
 					}
 				});
 			},
 			commitImages(){
-				uploadAllImages(this.imgaes)
+				uploadAllImages(this.images)
 				this.images=[]
 			}
 		}

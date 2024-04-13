@@ -1,5 +1,25 @@
 {
-	"pages": [{
+	"pages": [
+		{
+			"path": "pages/law_and_advice/law_and_advice",
+			"style": {
+				"navigationBarTitleText": "法条和建议"
+			}
+		}, 
+		{
+			"path": "pages/questionnaire/questionnaire",
+			"style": {
+				"navigationBarTitleText": "问卷"
+			}
+		}, 
+		{
+			"path": "pages/work/picture/picture",
+			"style": {
+				"navigationBarTitleText": "图像识别"
+			}
+		}, 
+		
+		{
 		"path": "pages/login",
 		"style": {
 			"navigationBarTitleText": "登录"
