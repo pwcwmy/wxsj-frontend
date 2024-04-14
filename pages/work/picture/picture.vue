@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<div class="app">
 		<header class="navbar">
 			<div class="title">外来物种识别</div>
@@ -16,18 +16,19 @@
 					<img :src="icon3Path" alt="图标3" class="icon">
 					<img :src="icon4Path" alt="图标4" class="icon">
 				</div>
-				<!-- 点击按钮进行识别 -->
 				<div class="button-container">
-				  <button @click="commitImages()">开始识别</button>
-				  <div class="counter">{{counterOfImages}}</div>
+					<button @click="commitImages()">开始识别</button>
+					<div class="counter">{{counterOfImages}}</div>
 				</div>
-				</div>
+			</div>
 		</div>
 	</div>
 </template>
 
 <script>
-	import {uploadAllImages} from '@/api/wxsj/picture.js'
+	import {
+		uploadAllImages
+	} from '@/api/wxsj/picture.js'
 	export default {
 		data() {
 			return {
@@ -44,17 +45,19 @@
 		},
 		methods: {
 			chooseFromCamera() {
+				console.log("图片来源1:直接拍照")
 				uni.chooseImage({
 					sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
 					sourceType: ['camera'], // 可以指定来源是相册还是相机，默认二者都有
 					success: (res) => {
-						// tempFilePath可以作为img标签的src属性显示图片
+						// tempFilePath可以作为img标签的src属性显示图片	
 						this.images.push(res.tempFilePaths)
 						this.counterOfImages += res.tempFilePaths.length
 					}
 				});
 			},
 			chooseFromAlbum() {
+				console.log("图片来源2:打开相册")
 				uni.chooseImage({
 					sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
 					sourceType: ['album'], // 可以指定来源是相册还是相机，默认二者都有
@@ -66,9 +69,9 @@
 					}
 				});
 			},
-			commitImages(){
+			commitImages() {
 				uploadAllImages(this.images)
-				this.images=[]
+				this.images = []
 			}
 		}
 	};
@@ -163,34 +166,124 @@
 		padding: 15px;
 		/* 使用标准单位 */
 	}
-	
+
 	.button-container {
-	  position: relative; /* 设置相对定位基准 */
-	  display: inline-block; /* 使容器适应内容宽度 */
-	}
-	
-	.button-container button {
-	  width: 200px;
-	  position: relative; /* 确保按钮可以被定位上下文正确计算 */
-	  z-index: 1; /* 使按钮位于覆盖层上方 */
-	}
-	
-	.counter {
-	  position: absolute; /* 绝对定位到容器内部 */
-	  top: -10px; /* 向上移动，超出容器边缘 */
-	  right: -10px; /* 向右移动，超出容器边缘 */
-	  background-color: white; /* 设置背景色为白色 */
-	  color: black; /* 设置文字颜色为黑色 */
-	  border: 1px solid gray; /* 设置边框为灰色 */
-	  padding: 3px; /* 内边距，确保足够空间使文本居中 */
-	  border-radius: 50%; /* 设置为圆形 */
-	  width: 20px; /* 定义宽度 */
-	  height: 20px; /* 定义高度 */
-	  display: flex; /* 启用Flexbox */
-	  align-items: center; /* 垂直居中 */
-	  justify-content: center; /* 水平居中 */
-	  font-size: 12px; /* 字体大小 */
-	  z-index: 2; /* 保证覆盖层位于按钮之上 */
+		position: relative;
+		/* 设置相对定位基准 */
+		display: inline-block;
+		/* 使容器适应内容宽度 */
 	}
 
+	.button-container button {
+		width: 200px;
+		position: relative;
+		/* 确保按钮可以被定位上下文正确计算 */
+		z-index: 1;
+		/* 使按钮位于覆盖层上方 */
+	}
+
+	.counter {
+		position: absolute;
+		/* 绝对定位到容器内部 */
+		top: -10px;
+		/* 向上移动，超出容器边缘 */
+		right: -10px;
+		/* 向右移动，超出容器边缘 */
+		background-color: white;
+		/* 设置背景色为白色 */
+		color: black;
+		/* 设置文字颜色为黑色 */
+		border: 1px solid gray;
+		/* 设置边框为灰色 */
+		padding: 3px;
+		/* 内边距，确保足够空间使文本居中 */
+		border-radius: 50%;
+		/* 设置为圆形 */
+		width: 20px;
+		/* 定义宽度 */
+		height: 20px;
+		/* 定义高度 */
+		display: flex;
+		/* 启用Flexbox */
+		align-items: center;
+		/* 垂直居中 */
+		justify-content: center;
+		/* 水平居中 */
+		font-size: 12px;
+		/* 字体大小 */
+		z-index: 2;
+		/* 保证覆盖层位于按钮之上 */
+	}
+</style> -->
+
+<template>
+	<div class="image-recognition">
+		<input type="file" @change="handleFileUpload" style="display: none;" ref="fileInput">
+		<button @click="triggerFileUpload">选择图片</button>
+		<button @click="recognizeImage">识别图片</button>
+		<img :src="displayImage" v-if="displayImage" style="max-width: 100%; margin-top: 20px;" />
+		<div v-if="recognitionResult" class="result">
+			<strong>识别结果:</strong> {{ recognitionResult }}
+		</div>
+	</div>
+</template>
+
+<script>
+	import axios from 'axios';
+	export default {
+		data() {
+			return {
+				displayImage: '', // 用于显示上传的图片
+				recognitionResult: '', // 用于显示识别结果
+			};
+		},
+		methods: {
+			triggerFileUpload() {
+				this.$refs.fileInput.click(); // 触发文件选择对话框
+			},
+			handleFileUpload(event) {
+				const file = event.target.files[0];
+				if (file) {
+					const reader = new FileReader();
+					reader.onload = (e) => {
+						this.displayImage = e.target.result; // 将图片的URL设置为dataURL
+					};
+					reader.readAsDataURL(file);
+				}
+			},
+			recognizeImage() {
+				this.recognitionResult = '光速识别中...'; // 显示识别中状态
+				const formData = new FormData();
+				formData.append('image', this.$refs.fileInput.files[0]); // 添加文件到表单数据
+
+				axios.post('/dev-api/pytorch/image/recognize', formData, {
+						headers: {
+							'Content-Type': 'multipart/form-data'
+						}
+					})
+					.then(response => {
+						this.recognitionResult = response.data;
+					})
+					.catch(error => {
+						console.error('大模型图像识别过程发生错误:', error);
+					});
+			}
+		}
+	};
+</script>
+
+<style scoped>
+	.image-recognition {
+		max-width: 1000px;
+		margin: auto;
+		padding: 20px;
+		border: 1px solid #ddd;
+		border-radius: 4px;
+	}
+
+	.result {
+		margin-top: 20px;
+		padding-top: 10px;
+		border-top: 1px solid #eee;
+	}
 </style>
