@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
 	<div class="app">
 		<header class="navbar">
 			<div class="title">外来物种识别</div>
@@ -214,9 +214,9 @@
 		z-index: 2;
 		/* 保证覆盖层位于按钮之上 */
 	}
-</style> -->
+</style>
 
-<template>
+<!-- <template>
 	<div class="image-recognition">
 		<input type="file" @change="handleFileUpload" style="display: none;" ref="fileInput">
 		<button @click="triggerFileUpload">选择图片</button>
@@ -286,4 +286,4 @@
 		padding-top: 10px;
 		border-top: 1px solid #eee;
 	}
-</style>
+</style>  -->

@@ -1,12 +1,12 @@
 import request from '@/utils/request'
 
 export function submitQuestionnaire(data, successCallback, errorCallback) {
-  return request({
-    url: '/wxsj/collect', // 更改为你的后端API URL
-    method: 'post',
-    data: data,
-	headers: {
-	  isToken: false
-	}
-  });
+	return request({
+		url: '/dev-api/wxsj/question/list',
+		method: 'post',
+		data: data,
+		headers: {
+			isToken: false
+		}
+	});
 }
