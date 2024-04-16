@@ -72,23 +72,54 @@
 				<uni-grid-item>
 					<view class="grid-item-box">
 						<uni-icons type="wallet-filled" size="30"></uni-icons>
-						<text class="text">图像识别</text>
+						<navigator url="/pages/work/picture/picture">
+							<text class="text">图像识别</text>
+						</navigator>
+						
 					</view>
 				</uni-grid-item>
 				<uni-grid-item>
 						<view class="grid-item-box">
 							<uni-icons type="wallet-filled" size="30"></uni-icons>
-							<navigator url="law/law"><text class="text">法律推理</text></navigator>
-							</navigation-bar>
+							<navigator open-type="navigate" url="/pages/law_and_advice/law_and_advice">
+								<text class="text">法律推理</text>
+							</navigator>
+							
 						</view>
 				</uni-grid-item>
 				<uni-grid-item>
 					<view class="grid-item-box">
 						<uni-icons type="wallet-filled" size="30"></uni-icons>
-						<text class="text">生态咨讯</text>
+						<navigator url="/pages/questionnaire/questionnaire">
+							<text class="text">问卷</text>
+						</navigator>
+						
 					</view>
 				</uni-grid-item>
-
+				<uni-grid-item>
+					<view class="grid-item-box">
+						<uni-icons type="wallet-filled" size="30"></uni-icons>
+						<navigator url="/pages/species/species">
+							<text class="text">物种详情</text>
+						</navigator>
+					</view>
+				</uni-grid-item>
+				<uni-grid-item>
+					<view class="grid-item-box">
+						<uni-icons type="wallet-filled" size="30"></uni-icons>
+						<navigator url="/pages/news/news">
+							<text class="text">资讯</text>
+						</navigator>
+					</view>
+				</uni-grid-item>
+				<uni-grid-item>
+					<view class="grid-item-box">
+						<uni-icons type="wallet-filled" size="30"></uni-icons>
+						<navigator url="/pages/work/news/news">
+							<text class="text">资讯_p</text>
+						</navigator>
+					</view>
+				</uni-grid-item>
 			</uni-grid>
 		</view>
 	</view>
@@ -120,7 +151,7 @@
 				this.current = e.detail.current
 			},
 			changeGrid(e) {
-				this.$modal.showToast('模块建设中~')
+				//this.$modal.showToast('模块建设中~')
 			}
 		}
 	}

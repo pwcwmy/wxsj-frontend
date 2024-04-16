@@ -7,7 +7,7 @@
 					<!-- Question 1 -->
 					<view class="question">
 						<text>1. 行为主体</text>
-						<radio-group @change="onSubjectChange">
+						<radio-group name="行为主体" @change="onChange">
 							<label class="radio-label">
 								<radio value="自然人" />自然人
 							</label>
@@ -20,7 +20,7 @@
 					<!-- Question 2 -->
 					<view class="question">
 						<text>2. 携带、邮寄的物品</text>
-						<radio-group @change="onItemsChange">
+						<radio-group name="物品类型" @change="onChange">
 							<label class="radio-label">
 								<radio value="携带、邮寄植物种子、种苗及其他繁殖材料" />携带、邮寄植物种子、种苗及其他繁殖材料
 							</label>
@@ -32,11 +32,11 @@
 							</label>
 						</radio-group>
 					</view>
-
+					
 					<!-- Question 3 -->
 					<view class="question">
-						<text>3. 是否申报检疫</text>
-						<radio-group @change="onQuarantineChange">
+						<text>3. 携带、邮寄的物品是否属于《禁止携带、寄递进境的动植物及其产品和其他检疫物名录》</text>
+						<radio-group name="违反" @change="onChange">
 							<label class="radio-label">
 								<radio value="是" />是
 							</label>
@@ -46,7 +46,45 @@
 						</radio-group>
 					</view>
 
-					<!-- Declaration Checkbox -->
+					<!-- Question 4 -->
+					<view class="question">
+						<text>4. 是否存在豁免情况</text>
+						<radio-group name="豁免" @change="onChange">
+							<label class="radio-label">
+								<radio value="是" />是
+							</label>
+							<label class="radio-label">
+								<radio value="否" />否
+							</label>
+						</radio-group>
+					</view>
+					
+					<!-- Question 5 -->
+					<view class="question">
+						<text>5. 是否申报检疫</text>
+						<radio-group name="检疫" @change="onChange">
+							<label class="radio-label">
+								<radio value="是" />是
+							</label>
+							<label class="radio-label">
+								<radio value="否" />否
+							</label>
+						</radio-group>
+					</view>
+					
+					<!-- Question 6 -->
+					<view class="question">
+						<text>6. 检疫是否合格</text>
+						<radio-group name="检疫合格" @change="onChange">
+							<label class="radio-label">
+								<radio value="是" />是
+							</label>
+							<label class="radio-label">
+								<radio value="否" />否
+							</label>
+						</radio-group>
+					</view>
+					
 					<checkbox-group @change="onDeclarationChange">
 						<label class="checkbox-label">
 							<checkbox :checked="checked" />我保证以上信息真实无误。
@@ -71,34 +109,21 @@
 	export default {
 		data() {
 			return {
-				formData: {
-					subject: '',
-					items: '',
-					quarantine: ''
-				},
+				formDataCount: 0,
 				checked: false
 			};
 		},
 		methods: {
-			onSubjectChange(event) {
-				this.formData.subject = event.detail.value;
+			onChange(event) {
+				this.formDataCount = this.formDataCount + 1;
 			},
-			onItemsChange(event) {
-				this.formData.items = event.detail.value;
+			onDeclarationChange(){
+				this.checked = !this.checked;
 			},
-			onQuarantineChange(event) {
-				this.formData.quarantine = event.detail.value;
-			},
-			onDeclarationChange() {
-				this.checked = !this.checked
-			},
-
 			formSubmit: function(e) {
-				e.preventDefault();
-				// 检查所有字段是否已填写
-				if (!this.formData.subject || !this.formData.items || !this.formData.quarantine) {
+				if(this.formDataCount<6){
 					uni.showToast({
-						title: '请回答所有问题',
+						title: '请填写所有信息',
 						icon: 'none'
 					});
 					return;
@@ -110,20 +135,18 @@
 					});
 					return;
 				}
+				var formdata = e.detail.value
 
-				submitQuestionnaire(this.formData).then(res => {
+				submitQuestionnaire(formdata).then(res => {
 					this.resetFormData()
 					// 返回首页
 				});
 			},
 			resetFormData() {
-				this.formData = {
-					subject: '',
-					items: '',
-					quarantine: ''
-				};
+				this.formDataCount = 0;
 				this.checked = false;
-			}
+			},
+						
 		}
 	}
 </script>
