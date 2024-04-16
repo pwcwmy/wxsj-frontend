@@ -1,5 +1,12 @@
 {
-	"pages": [{
+	"pages": [
+		{
+			"path": "pages/work/index",
+			"style": {
+				"navigationBarTitleText": "工作台"
+			}
+		},
+		{
 			"path": "pages/law_and_advice/law_and_advice",
 			"style": {
 				"navigationBarTitleText": "法条和建议"
@@ -11,12 +18,30 @@
 				"navigationBarTitleText": "问卷"
 			}
 		},
-		// {
-		// 	"path": "pages/work/picture/picture",
-		// 	"style": {
-		// 		"navigationBarTitleText": "图像识别"
-		// 	}
-		// },
+		{
+			"path": "pages/work/picture/picture",
+			"style": {
+				"navigationBarTitleText": "图像识别"
+			}
+		},
+		{
+			"path": "pages/species/species",
+			"style": {
+				"navigationBarTitleText": "物种详情"
+			}
+		},
+		{
+			"path": "pages/news/news",
+			"style": {
+				"navigationBarTitleText": "资讯M"
+			}
+		},
+		{
+			"path": "pages/work/news/news",
+			"style": {
+				"navigationBarTitleText": "资讯P"
+			}
+		},
 		{
 			"path": "pages/login",
 			"style": {
@@ -32,11 +57,6 @@
 			"style": {
 				"navigationBarTitleText": "万象生机移动端框架",
 				"navigationStyle": "custom"
-			}
-		}, {
-			"path": "pages/work/index",
-			"style": {
-				"navigationBarTitleText": "工作台"
 			}
 		}, {
 			"path": "pages/mine/index",
@@ -89,33 +109,8 @@
 				"navigationBarTitleText": "浏览文本"
 			}
 
-		}, {
-			"path": "pages/work/law/law",
-			"style": {
-				"navigationBarTitleText": "法律推理",
-				"enablePullDownRefresh": false
-			}
-		}, {
-			"path": "pages/work/picture/picture",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-		}, {
-			"path": "pages/work/news/news",
-			"style": {
-				"enablePullDownRefresh": true,
-				"navigationBarTitleText": "垂直排列，图文混排"
-			}
-
-		}, {
-			"path": "pages/work/question/question",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-
 		}
+		
 	],
 	"tabBar": {
 		"color": "#000000",
