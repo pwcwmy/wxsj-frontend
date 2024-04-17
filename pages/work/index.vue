@@ -81,7 +81,7 @@
 				<uni-grid-item>
 						<view class="grid-item-box">
 							<uni-icons type="wallet-filled" size="30"></uni-icons>
-							<navigator open-type="navigate" url="/pages/law_and_advice/law_and_advice">
+							<navigator open-type="navigate" url="/pages/work/law_and_advice/law_and_advice">
 								<text class="text">法律推理</text>
 							</navigator>
 							
@@ -90,7 +90,7 @@
 				<uni-grid-item>
 					<view class="grid-item-box">
 						<uni-icons type="wallet-filled" size="30"></uni-icons>
-						<navigator url="/pages/questionnaire/questionnaire">
+						<navigator url="/pages/work/questionnaire/questionnaire">
 							<text class="text">问卷</text>
 						</navigator>
 						
@@ -99,7 +99,7 @@
 				<uni-grid-item>
 					<view class="grid-item-box">
 						<uni-icons type="wallet-filled" size="30"></uni-icons>
-						<navigator url="/pages/species/species">
+						<navigator url="/pages/work/species/species">
 							<text class="text">物种详情</text>
 						</navigator>
 					</view>
@@ -108,15 +108,7 @@
 					<view class="grid-item-box">
 						<uni-icons type="wallet-filled" size="30"></uni-icons>
 						<navigator url="/pages/news/news">
-							<text class="text">资讯</text>
-						</navigator>
-					</view>
-				</uni-grid-item>
-				<uni-grid-item>
-					<view class="grid-item-box">
-						<uni-icons type="wallet-filled" size="30"></uni-icons>
-						<navigator url="/pages/work/news/news">
-							<text class="text">资讯_p</text>
+							<text class="text">资讯M</text>
 						</navigator>
 					</view>
 				</uni-grid-item>

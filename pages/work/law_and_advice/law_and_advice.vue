@@ -14,27 +14,19 @@
 				</div>
 			</div>
 		</div>
-		<button class="report-btn" @click="reportIssue">上报发现</button>
+		<navigator class="report-btn" open-type="navigate" url="/pages/work/questionnaire/questionnaire">上报发现</navigator>
+
 	</div>
 </template>
 
 <script>
+	import { getLaw } from '../../../api/wxsj/law.js'
 	export default {
 		data() {
 			return {
-				lawParagraphs: [
-					'《生物安全法》第八十一条 任何单位和个人未经批准，不得擅自引进、释放或者丢弃外来物种。 ',
-					'违反本法规定，未经批准，擅自引进外来物种的，由县级以上人民政府有关部门根据职责分工，没收引进的外来物种，并处五万元以上二十五万元以下的罚款。',
-				],
-				adviceParagraphs: [
-					'根据您所提供的信息可知，您此次购买的宠物红耳彩龟是外来入侵物种，根据《生物安全法》第81条规定：任何单位和个人未经批准，不得擅自引进、释放或者丢弃外来物种。 若您未经批准购买、释放或丢弃此种生物，可能会面临相关行政处罚。',
-				]
+				lawParagraphs: [],
+				adviceParagraphs: []
 			};
-		},
-		methods: {
-			reportIssue() {
-				// 上报发现逻辑
-			}
 		},
 		async mounted() {
 			// 获取后台输入的自然段内容并分别存储到数组中
@@ -44,12 +36,21 @@
 			//   "adviceParagraphs": ["建议自然段1", "建议自然段2", ...]
 			// }
 			// 将具体的获取数据逻辑替换为实际的后台请求代码
-			const response = await fetch('Your API endpoint');
-			const data = await response.json();
+			
+			// id 与具体物种有关？
+			getLaw(1).then(response => {
+				console.log(response)
+			    this.lawParagraphs = response.lawParagraphs;
+			    this.adviceParagraphs = response.adviceParagraphs;
+			  }).catch(error => {
+			    console.error('请求错误:', error);
+			  });
 
-			this.lawParagraphs = data.lawParagraphs;
-			this.adviceParagraphs = data.adviceParagraphs;
+			
 		},
+		methods: {
+		}
+
 	};
 </script>
 
@@ -68,10 +69,11 @@
 		flex: 1;
 		padding: 20px;
 		/* 使用标准单位 */
+		margin-top: 80px;
 	}
 
 	.section {
-		margin-top: 100px;
+		margin-top: 50px;
 		margin-bottom: 20px;
 		padding: 20px;
 		background-color: #FFFFFF;

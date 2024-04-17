@@ -76,7 +76,7 @@
 <script>
 	import {
 		getSpeciesInf
-	} from '../../api/wxsj/species';
+	} from '../../../api/wxsj/species';
 	export default {
 		data() {
 			return {

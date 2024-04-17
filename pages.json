@@ -7,13 +7,13 @@
 			}
 		},
 		{
-			"path": "pages/law_and_advice/law_and_advice",
+			"path": "pages/work/law_and_advice/law_and_advice",
 			"style": {
 				"navigationBarTitleText": "法条和建议"
 			}
 		},
 		{
-			"path": "pages/questionnaire/questionnaire",
+			"path": "pages/work/questionnaire/questionnaire",
 			"style": {
 				"navigationBarTitleText": "问卷"
 			}
@@ -25,7 +25,7 @@
 			}
 		},
 		{
-			"path": "pages/species/species",
+			"path": "pages/work/species/species",
 			"style": {
 				"navigationBarTitleText": "物种详情"
 			}
@@ -34,12 +34,6 @@
 			"path": "pages/news/news",
 			"style": {
 				"navigationBarTitleText": "资讯M"
-			}
-		},
-		{
-			"path": "pages/work/news/news",
-			"style": {
-				"navigationBarTitleText": "资讯P"
 			}
 		},
 		{
