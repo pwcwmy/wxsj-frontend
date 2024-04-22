@@ -73,7 +73,7 @@
 					<view class="grid-item-box">
 						<uni-icons type="wallet-filled" size="30"></uni-icons>
 						<navigator url="/pages/work/picture/picture">
-							<text class="text">图像识别</text>
+							<text class="text">图像识别<Main></Main></text>
 						</navigator>
 						
 					</view>
