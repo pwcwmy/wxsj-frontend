@@ -105,7 +105,7 @@
 <script>
 	import {
 		submitQuestionnaire
-	} from "../../api/wxsj/submitQuestionnaire";
+	} from ".../../../api/wxsj/submitQuestionnaire";
 	export default {
 		data() {
 			return {

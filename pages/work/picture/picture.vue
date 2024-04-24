@@ -3,13 +3,23 @@
 		<header class="navbar">
 			<div class="title">外来物种识别</div>
 		</header>
-		<div class="content">
-			<image class="background" src="@/static/images/bg2.png"></image>
+		<view class="camera-container">
+		        <camera v-if="cameraActive" id="myCamera" device-position="back" flash="auto" style="width: 100vw; height: 100vh;">
+					<button @click="takePhoto">拍照</button>
+				</camera>
+		</view>
+		<div class="content" v-if="!cameraActive">
+			<image class="background" :src="displayImage" mode="aspectFit"></image>
+			<view class="image-recognition">
+					<view v-if="recognitionResult" class="result">
+						<strong>识别结果:</strong> {{ recognitionResult }}
+					</view>
+			</view>
 			<div class="centered">
 				<button class="capture-btn" @click="chooseFromCamera">
 					<img :src="cameraIconPath" alt="相机图标" class="camera-icon">
 				</button>
-				<div class="choose-from-album" @click="chooseFromAlbum">从相册中选择 &gt;</div>
+				<div class="choose-from-album" @click="chooseImage">从相册中选择 &gt;</div>
 				<div class="icon-container">
 					<img :src="icon1Path" alt="图标1" class="icon">
 					<img :src="icon2Path" alt="图标2" class="icon">
@@ -17,65 +27,99 @@
 					<img :src="icon4Path" alt="图标4" class="icon">
 				</div>
 				<div class="button-container">
-					<button @click="commitImages()">开始识别</button>
-					<div class="counter">{{counterOfImages}}</div>
+					<button @click="uploadImage()">开始识别</button>
+					<!-- <div class="counter"></div> -->
 				</div>
+				
 			</div>
 		</div>
 	</div>
 </template>
 
+
 <script>
-	import {
-		uploadAllImages
-	} from '@/api/wxsj/picture.js'
 	export default {
 		data() {
 			return {
-				cameraIconPath: require('@/static/images/camera.png'),
-				backgroundImagePath: require('@/static/images/bg2.png'),
-				icon1Path: require('@/static/images/plant.png'),
-				icon2Path: require('@/static/images/bird.png'),
-				icon3Path: require('@/static/images/fish.png'),
-				icon4Path: require('@/static/images/hippo.png'),
-				// 上传的图片信息暂存
-				images: [],
-				counterOfImages: 0
+				cameraIconPath: require('@/static/images/recognize/camera.png'),
+				icon1Path: require('@/static/images/recognize/plant.png'),
+				icon2Path: require('@/static/images/recognize/bird.png'),
+				icon3Path: require('@/static/images/recognize/fish.png'),
+				icon4Path: require('@/static/images/recognize/hippo.png'),
+				displayImage: "/static/images/recognize/bg2.png", // 用于显示上传的图片
+				recognitionResult: '', // 用于显示识别结果
+				imagePath: '', // 存储选中图片的本地路径
+				cameraContext: null, // 摄像头上下文对象
+				cameraActive: false
 			};
+		},
+		mounted() {
+					this.cameraContext = uni.createCameraContext(); // 获取摄像头上下文
 		},
 		methods: {
 			chooseFromCamera() {
-				console.log("图片来源1:直接拍照")
+							this.cameraActive = true; // 激活摄像头
+							console.log("qii")
+						},
+			takePhoto() {
+				this.cameraContext.takePhoto({
+				quality: 'high',
+				success: (res) => {
+					this.displayImage = res.tempImagePath; // 显示拍照获取的图片
+					this.imagePath = res.tempImagePath; // 存储图片路径以便上传
+					},
+				fail: () => {
+					uni.showToast({
+						title: '拍照失败',
+						icon: 'none'
+						});
+					}
+				});
+				this.cameraActive = false;
+			},
+			chooseImage() {
 				uni.chooseImage({
-					sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-					sourceType: ['camera'], // 可以指定来源是相册还是相机，默认二者都有
-					success: (res) => {
-						// tempFilePath可以作为img标签的src属性显示图片	
-						this.images.push(res.tempFilePaths)
-						this.counterOfImages += res.tempFilePaths.length
+					count: 1, // 默认选择1张图片
+					success: (chooseImageRes) => {
+						const imagePath = chooseImageRes.tempFilePaths[0];
+						this.displayImage = imagePath; // 显示图片
+						this.imagePath = imagePath; // 存储图片路径以便上传
 					}
 				});
 			},
-			chooseFromAlbum() {
-				console.log("图片来源2:打开相册")
-				uni.chooseImage({
-					sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-					sourceType: ['album'], // 可以指定来源是相册还是相机，默认二者都有
-					success: (res) => {
-						// tempFilePath可以作为img标签的src属性显示图片
-						this.images.push(res.tempFilePaths)
-						this.counterOfImages += res.tempFilePaths.length
-						console.log(this.images, this.counterOfImages)
+			uploadImage() {
+				if (!this.imagePath) {
+					return uni.showToast({
+						title: '请先选择图片/拍照',
+						icon: 'none'
+					});
+				}
+
+				this.recognitionResult = '光速识别中...'; // 显示识别中状态
+				const formData = [] // Create a new FormData object
+				formData.push('image', {
+					uri: this.imagePath,
+					name: 'image.jpg'
+				}); // 添加文件到表单数据
+				console.log(formData);
+
+				uni.uploadFile({
+					url: '/dev-api/pytorch/image/recognize', // 你的接口地址
+					filePath: this.imagePath,
+					name: 'image',
+					formData: formData,
+					success: (uploadFileRes) => {
+						this.recognitionResult = uploadFileRes.data; // 设置识别结果
+					},
+					fail: (error) => {
+						console.error('大模型图像识别过程发生错误:', error);
 					}
 				});
-			},
-			commitImages() {
-				uploadAllImages(this.images)
-				this.images = []
 			}
 		}
 	};
 </script>
+
 
 <style scoped>
 	.app {
@@ -103,7 +147,7 @@
 		height: calc(100vh - 50px);
 		/* 减去上边距 */
 		position: relative;
-		padding-top: 130px;
+		padding-top: 40px;
 		/* 新增上边距 */
 	}
 
@@ -113,8 +157,6 @@
 		left: 0;
 		width: 100%;
 		height: 50%;
-		/*  background-image: url('/static/images/bg2.png') */
-		;
 		background-size: cover;
 		z-index: -1;
 		/* 背景图片置于底层 */
@@ -122,11 +164,12 @@
 
 	.centered {
 		text-align: center;
+		margin-top: 150px;
 	}
 
 	.capture-btn {
-		width: 160px;
-		height: 160px;
+		width: 150px;
+		height: 150px;
 		border-radius: 50%;
 		border: 2px solid black;
 		background-color: white;
@@ -157,7 +200,7 @@
 		justify-content: space-between;
 		/* 图标间距相等 */
 		width: 100%;
-		margin-top: 40px;
+		margin-top: 30px;
 	}
 
 	.icon {
@@ -181,109 +224,4 @@
 		z-index: 1;
 		/* 使按钮位于覆盖层上方 */
 	}
-
-	.counter {
-		position: absolute;
-		/* 绝对定位到容器内部 */
-		top: -10px;
-		/* 向上移动，超出容器边缘 */
-		right: -10px;
-		/* 向右移动，超出容器边缘 */
-		background-color: white;
-		/* 设置背景色为白色 */
-		color: black;
-		/* 设置文字颜色为黑色 */
-		border: 1px solid gray;
-		/* 设置边框为灰色 */
-		padding: 3px;
-		/* 内边距，确保足够空间使文本居中 */
-		border-radius: 50%;
-		/* 设置为圆形 */
-		width: 20px;
-		/* 定义宽度 */
-		height: 20px;
-		/* 定义高度 */
-		display: flex;
-		/* 启用Flexbox */
-		align-items: center;
-		/* 垂直居中 */
-		justify-content: center;
-		/* 水平居中 */
-		font-size: 12px;
-		/* 字体大小 */
-		z-index: 2;
-		/* 保证覆盖层位于按钮之上 */
-	}
 </style>
-
-<!-- <template>
-	<div class="image-recognition">
-		<input type="file" @change="handleFileUpload" style="display: none;" ref="fileInput">
-		<button @click="triggerFileUpload">选择图片</button>
-		<button @click="recognizeImage">识别图片</button>
-		<img :src="displayImage" v-if="displayImage" style="max-width: 100%; margin-top: 20px;" />
-		<div v-if="recognitionResult" class="result">
-			<strong>识别结果:</strong> {{ recognitionResult }}
-		</div>
-	</div>
-</template>
-
-<script>
-	import axios from 'axios';
-	export default {
-		data() {
-			return {
-				displayImage: '', // 用于显示上传的图片
-				recognitionResult: '', // 用于显示识别结果
-			};
-		},
-		methods: {
-			triggerFileUpload() {
-				this.$refs.fileInput.click(); // 触发文件选择对话框
-			},
-			handleFileUpload(event) {
-				const file = event.target.files[0];
-				if (file) {
-					const reader = new FileReader();
-					reader.onload = (e) => {
-						this.displayImage = e.target.result; // 将图片的URL设置为dataURL
-					};
-					reader.readAsDataURL(file);
-				}
-			},
-			recognizeImage() {
-				this.recognitionResult = '光速识别中...'; // 显示识别中状态
-				const formData = new FormData();
-				formData.append('image', this.$refs.fileInput.files[0]); // 添加文件到表单数据
-
-				axios.post('/dev-api/pytorch/image/recognize', formData, {
-						headers: {
-							'Content-Type': 'multipart/form-data'
-						}
-					})
-					.then(response => {
-						this.recognitionResult = response.data;
-					})
-					.catch(error => {
-						console.error('大模型图像识别过程发生错误:', error);
-					});
-			}
-		}
-	};
-</script>
-
-<style scoped>
-	.image-recognition {
-		max-width: 1000px;
-		margin: auto;
-		padding: 20px;
-		border: 1px solid #ddd;
-		border-radius: 4px;
-	}
-
-	.result {
-		margin-top: 20px;
-		padding-top: 10px;
-		border-top: 1px solid #eee;
-	}
-</style>  -->
